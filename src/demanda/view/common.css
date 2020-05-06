@@ -1,0 +1,12 @@
+.basic-button {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: rgb(69, 69, 69);
+}
+
+.basic-button:hover {
+    -fx-underline: true;
+}
