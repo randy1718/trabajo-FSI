@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="demanda.jar" size="10104" download="eager" />
+    <jar href="demanda.jar" size="10102" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="demanda" >
     <param name="requiredFXVersion" value="8.0+"/>

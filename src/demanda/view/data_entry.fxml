@@ -218,7 +218,7 @@
                   <Label text="Evento deterministico" />
                   <TextField fx:id="eventoDeterministico" />
                   <Label text="Evento probabilistico" />
-                  <TextField fx:id="eventoProbabilistico" text="\%" />
+                  <TextField fx:id="eventoProbabilistico" />
                   <ComboBox fx:id="typeCombobox" prefHeight="39.0" prefWidth="150.0" />
                   <Button mnemonicParsing="false" onAction="#ingresarDatos" style="-fx-border-radius: 10px;" styleClass="basic-button" text="Ingresar datos" textAlignment="CENTER">
                      <font>

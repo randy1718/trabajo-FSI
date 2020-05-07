@@ -152,10 +152,12 @@ public class DataEntryController {
                 for (int j = 0; j < ventas.size(); j++) {
                    if(j==2 || j==4 || j==8 || j==11){
                     ventasProyectadas.add(ventas.get(j) * eventoTotal);
-                   
+                    ((TextField) getNodeFromGridPane(dataEntryGrid, j+1, i + 1)).setText(""+(ventas.get(j) * eventoTotal));
                    }else{
+                     
                     ventasProyectadas.add(ventas.get(j) * eventProbabilistico);
-                    
+                    ((TextField) getNodeFromGridPane(dataEntryGrid, j+1, i + 1)).setText(""+(ventas.get(j) * eventProbabilistico));
+                       
                    }
                     System.out.println("     venta:    "+productos.get(i)+ ventasProyectadas.get(j));
                     
