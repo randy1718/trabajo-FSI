@@ -6,9 +6,9 @@ import java.util.Map;
 public class ProductData {
 
     private final String nombre;
-    private final List<Integer> ventas; // Mes: Ventas
+    private final List<Double> ventas; // Mes: Ventas
 
-    public ProductData(String nombre, List<Integer> ventas) {
+    public ProductData(String nombre, List<Double> ventas) {
         this.nombre = nombre;
         this.ventas = ventas;
     }
@@ -17,7 +17,7 @@ public class ProductData {
         return nombre;
     }
 
-    public List<Integer> getVentas() {
+    public List<Double> getVentas() {
         return ventas;
     }
 

@@ -13,6 +13,10 @@ import java.util.Arrays;
 public class ClientApplication extends Application {
 
     private static Stage window;
+
+    /**
+     *
+     */
     public static Model model = new Model(Arrays.asList(
             "Pan tajado sandwich",
             "Torta blanca de limón",

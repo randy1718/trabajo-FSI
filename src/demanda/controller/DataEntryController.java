@@ -24,9 +24,16 @@ import java.util.List;
 
 public class DataEntryController {
 
-    public @FXML GridPane dataEntryGrid;
-    public @FXML Text existsPreviousPredictionText, existsPreviousRealText;
-    public @FXML ComboBox<PerformanceType> typeCombobox;
+    public @FXML
+    GridPane dataEntryGrid;
+    public @FXML
+    Text existsPreviousPredictionText, existsPreviousRealText;
+    public @FXML
+    ComboBox<PerformanceType> typeCombobox;
+    public @FXML
+    TextField eventoProbabilistico;
+    public @FXML
+    TextField eventoDeterministico;
 
     private final List<String> productos = ClientApplication.model.getProductos();
     private int nCols;
@@ -61,7 +68,6 @@ public class DataEntryController {
         typeCombobox.getSelectionModel().select(0);
 
         // Inicialización del grid.
-
         for (int i = 0; i < productos.size(); i++) {
             for (int j = 0; j <= 12; j++) {
                 if (j != 0) {
@@ -81,14 +87,15 @@ public class DataEntryController {
 
         List<ProductData> productData = new ArrayList<>();
         for (int i = 0; i < productos.size(); i++) {
-            List<Integer> rowProductData = new ArrayList<>();
+            List<Double> rowProductData = new ArrayList<>();
             for (int j = 0; j <= 12; j++) {
                 if (j != 0) {
                     String extractedText = ((TextField) getNodeFromGridPane(dataEntryGrid, j, i + 1)).getText();
-                    if (extractedText.equals(""))
-                        rowProductData.add(0);
-                    else
-                        rowProductData.add(Integer.parseInt(extractedText));
+                    if (extractedText.equals("")) {
+                        rowProductData.add(0.0);
+                    } else {
+                        rowProductData.add(Double.parseDouble(extractedText));
+                    }
                 }
             }
             ProductData currentRowProductData = new ProductData(productos.get(i), rowProductData);
@@ -96,16 +103,74 @@ public class DataEntryController {
         }
 
         if (typeCombobox.getValue() == PerformanceType.PREDICTED) {
-            System.out.println(productData);
+            System.out.println("Prediction" + productData);
             ClientApplication.model.setPreviousYearPrediction(productData);
             ClientApplication.reloadScene();
         } else {
+            System.out.println("RealSales" + productData);
             ClientApplication.model.setPreviousYearReal(productData);
             ClientApplication.reloadScene();
         }
 
     }
 
+    public void proyeccionDemanda() throws IOException {
+        if (ClientApplication.model.getPreviousYearPrediction() == null || ClientApplication.model.getPreviousYearReal() == null) {
+            System.out.println("No se ha ingresado datos");
+        } else if (eventoProbabilistico.getText().isEmpty() || eventoDeterministico.getText().isEmpty()) {
+            System.out.println("No se ingresaron los eventos");
+        } else {
+            List<ProductData> productData = new ArrayList<>();
+            List<ProductData> productDataProm = new ArrayList<>();
+            double eventProbabilistico = Double.parseDouble(eventoProbabilistico.getText());
+            double eventDeterministico = Double.parseDouble(eventoDeterministico.getText());
+            double eventoTotal=(eventDeterministico*eventProbabilistico);
+            System.out.println("" + eventoTotal);
+            List<ProductData> PreviousPrediction = ClientApplication.model.getPreviousYearPrediction();
+            List<ProductData> Real = ClientApplication.model.getPreviousYearReal();
+            
+           for (int i = 0; i < productos.size(); i++) {
+                 List<Double> ventas = PreviousPrediction.get(i).getVentas();
+                 List<Double> ventasReales = Real.get(i).getVentas();
+                 List<Double> promVentas = new ArrayList<>();
+               for (int j = 0; j < ventas.size(); j++) {
+                  Double prom=(ventas.get(j)*ventasReales.get(j))/2;
+                 promVentas.add(prom);
+               }
+               ProductData currentRowProductData = new ProductData(productos.get(i), promVentas);
+               productDataProm.add(currentRowProductData);
+           }
+           System.out.println("Promedio:  " + productDataProm);
+           ClientApplication.model.setPromPreviousSales(productDataProm);
+  
+           List<ProductData> AverageSales = ClientApplication.model.getPromSales();
+          
+            for (int i = 0; i < productos.size(); i++) {
+                List<Double> ventasProyectadas = new ArrayList<>();
+                List<Double> ventas = AverageSales.get(i).getVentas();
+                 
+                for (int j = 0; j < ventas.size(); j++) {
+                   if(j==2 || j==4 || j==8 || j==11){
+                    ventasProyectadas.add(ventas.get(j) * eventoTotal);
+                   
+                   }else{
+                    ventasProyectadas.add(ventas.get(j) * eventProbabilistico);
+                    
+                   }
+                    System.out.println("     venta:    "+productos.get(i)+ ventasProyectadas.get(j));
+                    
+                }
+                ProductData currentRowProductData = new ProductData(productos.get(i), ventasProyectadas);
+                productData.add(currentRowProductData);
+            }
+            ClientApplication.model.setPrediction(productData);
+        }
+    }
+
+    
+    
+    
+    
     // Método custom para obtener un nodo del GridPane por columna y fila.
     private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
         int index = row * nCols + col;

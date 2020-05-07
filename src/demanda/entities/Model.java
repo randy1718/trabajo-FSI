@@ -7,6 +7,7 @@ public class Model {
     private final List<String> productos;
     private List<ProductData> previousYearPrediction;
     private List<ProductData> previousYearReal;
+    private List<ProductData> PromPreviousSales;
     private List<ProductData> prediction;
 
 
@@ -33,7 +34,16 @@ public class Model {
     public void setPreviousYearReal(List<ProductData> previousYearReal) {
         this.previousYearReal = previousYearReal;
     }
-
+ 
+    
+    public void setPromPreviousSales(List<ProductData> PromPreviousSales) {
+        this.PromPreviousSales = PromPreviousSales;
+    }
+    
+    public List<ProductData> getPromSales() {
+        return PromPreviousSales;
+    }
+    
     public List<ProductData> getPrediction() {
         return prediction;
     }
